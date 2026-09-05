@@ -163,13 +163,10 @@ class CIAScraper(GovScraperBase):
 
     async def fetch_reports(self, limit: int = 10) -> List[GovRecord]:
         records = []
-        jina_url = f"https://r.jina.ai/http://www.cia.gov/readingroom/search?q=UFO"
         try:
+            jina_url = "https://r.jina.ai/http://www.cia.gov/readingroom/search?q=UFO"
             resp = await self._rate_limited_get(jina_url)
-            if resp.status_code != 200:
-                return records
             text = resp.text
-            # Pattern 1: Markdown links [title](url) with UFO/UAP keywords
             for title_match, url_match in re.findall(r'\[([^\]]+)\]\((https?://[^)]+)\)', text):
                 if any(k in title_match.lower() for k in ['ufo', 'uap', 'unidentified', 'aerial', 'phenomena']):
                     records.append(GovRecord(
@@ -183,25 +180,8 @@ class CIAScraper(GovScraperBase):
                     ))
                     if len(records) >= limit:
                         break
-            # Pattern 2: Lines with UFO/UAP keywords and URLs
-            if len(records) == 0:
-                for line in text.split('\n'):
-                    line_lower = line.lower()
-                    if any(k in line_lower for k in ['ufo', 'uap', 'unidentified', 'aerial', 'phenomena']) and 'http' in line:
-                        url_match = re.search(r'\b(https?://[^\s\)]+\.(?:pdf|doc|htm|html))\b', line)
-                        if url_match:
-                            title = f"CIA Document from {url_match.group(1).split('/')[-1]}"
-                            records.append(GovRecord(
-                                source='CIA',
-                                url=url_match.group(1),
-                                title=title,
-                                published=None,
-                                summary=f"CIA FOIA document: {title}",
-                                text_sha256=self._hash_text(title),
-                                metadata={'tier': 2, 'access_type': 'FOIA'}
-                            ))
-                            if len(records) >= limit:
-                                break
+            if not records:
+                print("[CIA] FOIA search empty via Jina: access path may require JS/search rendering")
         except Exception as e:
             print(f"[ERROR] CIA: {e}")
         return records
@@ -209,13 +189,35 @@ class CIAScraper(GovScraperBase):
 
 class GEIPANScraper(GovScraperBase):
     def __init__(self):
-        super().__init__('GEIPAN', rate_limit=2.0)
+        super().__init__('GEIPAN', rate_limit=0.5)
         self.base_url = "https://www.cnes-geipan.fr/en"
 
     async def fetch_reports(self, limit: int = 10) -> List[GovRecord]:
-        # GEIPAN base de datos
         records = []
-        # Placeholder (requiere API key)
+        jina_url = "https://r.jina.ai/http://www.cnes-geipan.fr/en"
+        try:
+            resp = await self._rate_limited_get(jina_url)
+            if resp.status_code != 200:
+                return records
+            text = resp.text
+            for line in text.split('\n'):
+                if 'http' in line and any(k in line.lower() for k in ['case', 'observation', 'ufo', 'ovni', 'phenomenon']):
+                    url_match = re.search(r'\b(https?://[^\s\)]+)\b', line)
+                    if url_match:
+                        title = line.strip()[:120] or "GEIPAN case"
+                        records.append(GovRecord(
+                            source='GEIPAN',
+                            url=url_match.group(1),
+                            title=title,
+                            published=None,
+                            summary=f"GEIPAN document: {title}",
+                            text_sha256=self._hash_text(title),
+                            metadata={'tier': 2, 'access_type': 'public'}
+                        ))
+                        if len(records) >= limit:
+                            break
+        except Exception as e:
+            print(f"[ERROR] GEIPAN: {e}")
         return records
 
 
