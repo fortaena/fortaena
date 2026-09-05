@@ -1,7 +1,10 @@
-/** @type {import('next').NextConfig} */
+import path from "node:path";
+
 const nextConfig = {
   reactStrictMode: true,
-  // App Router only - no pages router
+  turbopack: {
+    root: path.dirname(new URL(import.meta.url).pathname)
+  }
 };
 
 export default nextConfig;

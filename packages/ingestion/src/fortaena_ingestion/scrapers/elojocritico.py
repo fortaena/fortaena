@@ -37,7 +37,7 @@ class ElOjoCriticoScraper:
         self.rate_limit = rate_limit
         self.client = httpx.AsyncClient(
             timeout=30.0,
-            headers={"User-Agent": "Fortæana/1.0 (+https://fortaena.org)"}
+            headers={"User-Agent": "Fortaena/1.0 (+https://fortaena.org)"}
         )
         self._last_request = 0.0
     

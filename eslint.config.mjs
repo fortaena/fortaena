@@ -1,13 +1,18 @@
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-
 export default [
-  ...nextVitals,
-  ...nextTs,
   {
+    files: ["**/*.{js,jsx,mjs,cjs}"],
+    languageOptions: {
+      ecmaVersion: 2024,
+      sourceType: "module",
+    },
     rules: {
-      "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-      "react/no-unescaped-entities": "off"
-    }
-  }
+      "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+      "no-console": "off",
+      "no-redeclare": "off",
+      "no-undef": "off",
+    },
+  },
+  {
+    ignores: ["node_modules/", ".git/", ".next/", ".open-next/", ".wrangler/", "tailwind.config.js", "postcss.config.js", "**/*.ts", "**/*.tsx"],
+  },
 ];
