@@ -1,9 +1,10 @@
 {
   "name": "fortaena",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "private": true,
   "scripts": {
+    "dev": "next dev",
     "build": "next build",
     "cf:build": "opennextjs-cloudflare build",
     "cf:deploy": "opennextjs-cloudflare deploy",
@@ -13,20 +14,17 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@opennextjs/aws": "4.1.4",
-    "@opennextjs/cloudflare": "1.20.6",
-    "esbuild": "0.28.1",
-    "next": "16.3.4",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "workerd": "1.20260903.1",
-    "wrangler": "4.129.0"
+    "@opennextjs/cloudflare": "^1.20.6",
+    "next": "^16.3.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "@types/node": "26.4.1",
-    "@types/react": "19.2.18",
-    "eslint": "9.39.5",
-    "typescript": "7.0.2",
-    "vitest": "5.0.0"
+    "@types/node": "^26.4.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.18",
+    "eslint": "^9.39.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
   }
 }
