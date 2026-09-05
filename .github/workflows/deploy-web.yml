@@ -30,6 +30,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 6fb0a0600c8d7663ad539f052ae1b8be
           command: deploy
 
       - name: Verify deployment
