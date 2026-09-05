@@ -1,9 +1,0 @@
-node_modules/
-.next/
-.wrangler/
-.open-next/
-*.log
-.DS_Store
-.env
-.env.local
-.vercel/
