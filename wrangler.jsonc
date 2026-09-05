@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "fortaena",
+  "account_id": "6fb0a0600c8d7663ad539f052ae1b8be",
   "compatibility_date": "2026-09-03",
   "compatibility_flags": ["nodejs_compat"],
   "main": ".open-next/worker.js",
